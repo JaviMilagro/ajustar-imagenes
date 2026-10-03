@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            icono: assets/icono.ico
+            artefacto: Ajustar-Imagenes-Windows
+          - os: macos-latest
+            icono: assets/icono.icns
+            artefacto: Ajustar-Imagenes-Mac
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q
+      - name: Empaquetar (Windows, un solo .exe)
+        if: runner.os == 'Windows'
+        run: pyinstaller --noconsole --onefile --name "Ajustar Imagenes" --icon "${{ matrix.icono }}" main.py
+      - name: Empaquetar (Mac, .app)
+        if: runner.os == 'macOS'
+        run: pyinstaller --noconsole --windowed --name "Ajustar Imagenes" --icon "${{ matrix.icono }}" main.py
+      - name: Comprimir .app
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent "dist/Ajustar Imagenes.app" "dist/Ajustar Imagenes.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artefacto }}
+          path: |
+            dist/Ajustar Imagenes.exe
+            dist/Ajustar Imagenes.zip
