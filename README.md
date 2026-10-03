@@ -4,6 +4,8 @@ A small desktop app that turns any product photo into a clean, uniform **800×80
 
 **Download (Windows):** [latest release](https://github.com/JaviMilagro/ajustar-imagenes/releases/latest) → `AjustarImagenes.exe` → double-click. No installation, no Python, no internet.
 
+![Main window of Ajustar Imágenes](docs/screenshot.png)
+
 ## The problem
 
 Product photos for the shop are pulled from many different websites: different sizes, aspect ratios, amounts of white border and, often, very poor quality. The shop needs every image to look the same. She was resizing them one by one with ChatGPT, which meant opening a chat, uploading, waiting, downloading, and getting slightly different results each time.
