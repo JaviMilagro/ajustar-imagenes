@@ -1,7 +1,7 @@
 # Ajustar imágenes
 
 Aplicación de escritorio muy simple para preparar fotos de producto: recorta el fondo blanco sobrante,
-escala el producto y lo centra sobre un lienzo blanco de **1100×1422 px** (margen del 8 %).
+escala el producto y lo centra sobre un lienzo blanco de **800×800 px** (margen del 8 %).
 Se elige una imagen, se ve el resultado y se guarda como JPG.
 
 - `ajustar_imagen.py`: lógica de ajuste (Pillow). Constantes `ANCHO`, `ALTO`, `MARGEN`.

@@ -4,7 +4,7 @@ from io import BytesIO
 
 from PIL import Image, ImageChops, ImageOps
 
-ANCHO, ALTO = 1100, 1422   # tamaño final de las imágenes de la tienda
+ANCHO, ALTO = 800, 800     # tamaño final de todas las imágenes (cuadrado estándar)
 MARGEN = 0.08              # espacio en blanco a cada lado (8 %), medido sobre las imágenes ya hechas a mano
 UMBRAL = 20                # diferencia mínima con el blanco para considerar "producto"
 
