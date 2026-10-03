@@ -29,3 +29,26 @@ def test_acepta_png_con_transparencia():
 
 def test_imagen_toda_blanca_no_falla():
     assert ajustar(Image.new("RGB", (50, 50), (255, 255, 255))).size == (ANCHO, ALTO)
+
+
+def _foto_pequena():
+    origen = Image.new("RGB", (200, 160), (255, 255, 255))
+    origen.paste(Image.new("RGB", (60, 90), (160, 20, 90)), (70, 35))
+    return origen
+
+
+def test_tamano_fijo_en_los_tres_modos():
+    for modo in ("ninguna", "clasica", "ia"):
+        assert ajustar(_foto_pequena(), modo).size == (ANCHO, ALTO)
+
+
+def test_ia_progreso_llega_al_final():
+    avances = []
+    ajustar(_foto_pequena(), "ia", progreso=avances.append)
+    assert avances and avances[-1] == 1.0
+
+
+def test_info_producto_ignora_el_fondo_blanco():
+    from ajustar_imagen import info_producto
+    w, h, escala = info_producto(_foto_pequena())
+    assert (w, h) == (60, 90) and escala > 1

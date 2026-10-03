@@ -13,9 +13,11 @@ jobs:
         include:
           - os: windows-latest
             icono: assets/icono.ico
+            sep: ";"
             artefacto: Ajustar-Imagenes-Windows
           - os: macos-latest
             icono: assets/icono.icns
+            sep: ":"
             artefacto: Ajustar-Imagenes-Mac
     runs-on: ${{ matrix.os }}
     steps:
@@ -27,10 +29,22 @@ jobs:
       - run: pytest -q
       - name: Empaquetar (Windows, un solo .exe)
         if: runner.os == 'Windows'
-        run: pyinstaller --noconsole --onefile --name "Ajustar Imagenes" --icon "${{ matrix.icono }}" main.py
+        run: >
+          pyinstaller --noconfirm --noconsole --onefile --name "Ajustar Imagenes"
+          --icon "${{ matrix.icono }}"
+          --collect-all customtkinter --collect-all tkinterdnd2 --collect-all onnxruntime
+          --add-data "assets/logo.png${{ matrix.sep }}assets"
+          --add-data "assets/models/realesr-general-x4v3.onnx${{ matrix.sep }}assets/models"
+          main.py
       - name: Empaquetar (Mac, .app)
         if: runner.os == 'macOS'
-        run: pyinstaller --noconsole --windowed --name "Ajustar Imagenes" --icon "${{ matrix.icono }}" main.py
+        run: >
+          pyinstaller --noconfirm --noconsole --windowed --name "Ajustar Imagenes"
+          --icon "${{ matrix.icono }}"
+          --collect-all customtkinter --collect-all tkinterdnd2 --collect-all onnxruntime
+          --add-data "assets/logo.png${{ matrix.sep }}assets"
+          --add-data "assets/models/realesr-general-x4v3.onnx${{ matrix.sep }}assets/models"
+          main.py
       - name: Comprimir .app
         if: runner.os == 'macOS'
         run: ditto -c -k --keepParent "dist/Ajustar Imagenes.app" "dist/Ajustar Imagenes.zip"
